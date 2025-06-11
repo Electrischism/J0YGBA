@@ -19,7 +19,7 @@
     "@emotion/styled": "^11.13.5",
     "@mui/material": "^7.0.1",
     "@mui/x-tree-view": "^8.3.0",
-    "@thenick775/mgba-wasm": "^2.3.4",
+    "@thenick775/mgba-wasm": "file:thenick775-mgba-wasm-2.3.4.tgz",
     "@uidotdev/usehooks": "^2.4.1",
     "@zip.js/zip.js": "^2.7.72",
     "jwt-decode": "^4.0.0",
@@ -73,6 +73,7 @@
     "vite": "^7.0.2",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.0.0",
+    "vite-plugin-static-copy": "^3.1.2",
     "vitest": "^3.0.2"
   }
 }

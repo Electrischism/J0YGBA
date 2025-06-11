@@ -103,6 +103,12 @@ export const useRunGame = () => {
           restoreAutoSaveStateOnLoad:
             emulatorSettings.restoreAutoSaveStateOnLoad
         });
+
+        // POC only
+        if (emulatorSettings.shader)
+          emulator?.loadShader(
+            `${emulator?.filePaths().shaderPath}/${emulatorSettings.shader}`
+          );
       }
 
       return !!isSuccessfulRun;

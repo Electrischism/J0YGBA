@@ -102,6 +102,10 @@ export type GBAEmulator = {
     autoSaveStateName: string,
     data: Uint8Array
   ) => Promise<void>;
+  // POC only
+  listShaders: () => string[];
+  loadShader: (shaderPath: string) => void;
+  unloadShader: () => void;
 };
 
 export const KEY_LOCATION_STANDARD = 0;
@@ -376,6 +380,10 @@ export const mGBAEmulator = (mGBA: mGBAEmulatorTypeDef): GBAEmulator => {
     uploadAutoSaveState: mGBA.uploadAutoSaveState,
     listAllFiles,
     parseCheatsString,
-    parsedCheatsToFile
+    parsedCheatsToFile,
+    // POC only
+    listShaders: mGBA.listShaders,
+    loadShader: mGBA.loadShader,
+    unloadShader: mGBA.unloadShader
   };
 };

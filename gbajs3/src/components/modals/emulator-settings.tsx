@@ -54,6 +54,8 @@ export type EmulatorSettings = {
   restoreAutoSaveStateOnLoad?: boolean;
   autoSaveStateLoadNotificationEnabled: boolean;
   autoSaveStateCaptureNotificationEnabled: boolean;
+  // POC only, this should be a part of the settings API
+  shader?: string;
 };
 
 type TabPanelProps = {
@@ -151,7 +153,9 @@ export const EmulatorSettingsModal = () => {
       autoSaveStateLoadNotificationEnabled:
         emulatorSettings?.autoSaveStateLoadNotificationEnabled ?? true,
       autoSaveStateCaptureNotificationEnabled:
-        emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true
+        emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true,
+      // POC only
+      shader: emulatorSettings?.shader ?? ''
     }
   });
   const [tabValue, setTabValue] = useState(0);
@@ -159,9 +163,13 @@ export const EmulatorSettingsModal = () => {
 
   const defaultAudioSampleRates = emulator?.defaultAudioSampleRates();
   const defaultAudioBufferSizes = emulator?.defaultAudioBufferSizes();
+  const defaultShaderPaths = emulator
+    ?.listShaders()
+    ?.filter((ss) => ss !== '.' && ss !== '..');
 
   const onSubmit: SubmitHandler<EmulatorSettings> = ({
     saveFileName,
+    shader,
     ...rest
   }) => {
     setEmulatorSettings({
@@ -169,7 +177,8 @@ export const EmulatorSettingsModal = () => {
       saveFileName:
         !!saveFileName && saveFileName !== emulator?.getCurrentSaveName()
           ? saveFileName
-          : undefined
+          : undefined,
+      shader
     });
 
     addCallbacks({
@@ -199,6 +208,11 @@ export const EmulatorSettingsModal = () => {
       autoSaveStateEnable: rest.autoSaveStateEnable,
       restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad
     });
+
+    // POC Only
+    if (shader && isRunning)
+      emulator?.loadShader(`${emulator?.filePaths().shaderPath}/${shader}`);
+    else if (emulatorSettings?.shader) emulator?.unloadShader();
   };
 
   const resetEmulatorSettings = () => {
@@ -416,6 +430,22 @@ export const EmulatorSettingsModal = () => {
                   valueAsNumber: true
                 })}
               />
+              <FormControl size="small">
+                <InputLabel>Shader</InputLabel>
+                <Select
+                  label="Shader"
+                  value={watch('shader')}
+                  defaultValue=""
+                  {...register('shader')}
+                >
+                  <MenuItem value={''}>No Shader</MenuItem>
+                  {defaultShaderPaths?.map((shaderPath, idx) => (
+                    <MenuItem key={`${shaderPath}_${idx}`} value={shaderPath}>
+                      {shaderPath}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <ManagedCheckbox
                 label="Timestep Sync"
                 watcher={watch('timestepSync')}

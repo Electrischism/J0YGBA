@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig(({ mode }) => {
   const withCOIServiceWorker = mode === 'with-coi-serviceworker';
@@ -101,7 +102,7 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,wasm}'],
+          globPatterns: ['**/*.{js,css,html,wasm,data,map}'],
           navigateFallbackDenylist: [/^\/admin/]
         },
         ...(withCOIServiceWorker
@@ -115,6 +116,14 @@ export default defineConfig(({ mode }) => {
               }
             }
           : {})
+      }),
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'node_modules/@thenick775/mgba-wasm/dist/*.{wasm.map,data}',
+            dest: ''
+          }
+        ]
       }),
       visualizer({ gzipSize: true })
     ],
