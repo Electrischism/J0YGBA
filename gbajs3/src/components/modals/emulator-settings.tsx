@@ -56,6 +56,7 @@ export type EmulatorSettings = {
   autoSaveStateCaptureNotificationEnabled: boolean;
   // POC only, this should be a part of the settings API
   shader?: string;
+  highResolutionScale?: number;
 };
 
 type TabPanelProps = {
@@ -155,7 +156,8 @@ export const EmulatorSettingsModal = () => {
       autoSaveStateCaptureNotificationEnabled:
         emulatorSettings?.autoSaveStateCaptureNotificationEnabled ?? true,
       // POC only
-      shader: emulatorSettings?.shader ?? ''
+      shader: emulatorSettings?.shader ?? '',
+      highResolutionScale: emulatorSettings?.highResolutionScale ?? 1
     }
   });
   const [tabValue, setTabValue] = useState(0);
@@ -206,7 +208,8 @@ export const EmulatorSettingsModal = () => {
       showFpsCounter: rest.showFpsCounter,
       autoSaveStateTimerIntervalSeconds: rest.autoSaveStateTimerIntervalSeconds,
       autoSaveStateEnable: rest.autoSaveStateEnable,
-      restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad
+      restoreAutoSaveStateOnLoad: rest.restoreAutoSaveStateOnLoad,
+      highResolutionScale: rest.highResolutionScale
     });
 
     // POC Only
@@ -242,7 +245,8 @@ export const EmulatorSettingsModal = () => {
       showFpsCounter: false,
       autoSaveStateTimerIntervalSeconds: 30,
       autoSaveStateEnable: true,
-      restoreAutoSaveStateOnLoad: true
+      restoreAutoSaveStateOnLoad: true,
+      highResolutionScale: 1
     });
   };
 
@@ -427,6 +431,19 @@ export const EmulatorSettingsModal = () => {
                 size="small"
                 {...register('frameSkip', {
                   required: { value: true, message: 'Frame skip is required' },
+                  valueAsNumber: true
+                })}
+              />
+              <NumberInput
+                label="Resolution Scale"
+                min={0}
+                max={32}
+                size="small"
+                {...register('highResolutionScale', {
+                  required: {
+                    value: true,
+                    message: 'Resolution scale is required'
+                  },
                   valueAsNumber: true
                 })}
               />

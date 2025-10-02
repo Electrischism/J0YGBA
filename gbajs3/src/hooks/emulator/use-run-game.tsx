@@ -101,7 +101,8 @@ export const useRunGame = () => {
             emulatorSettings.autoSaveStateTimerIntervalSeconds,
           autoSaveStateEnable: emulatorSettings.autoSaveStateEnable,
           restoreAutoSaveStateOnLoad:
-            emulatorSettings.restoreAutoSaveStateOnLoad
+            emulatorSettings.restoreAutoSaveStateOnLoad,
+          highResolutionScale: emulatorSettings.highResolutionScale
         });
 
         // POC only
